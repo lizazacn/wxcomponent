@@ -50,9 +50,9 @@ func main() {
 	g.Go(func() error {
 		var filePath = "etc/config.json"
 		conf, err := Utils.LoadConf(filePath)
-		if err != nil {
-			return err
-		}
+		//if err != nil {
+		//	return err
+		//}
 		if conf == nil {
 			conf = new(Struct.Conf)
 		}
