@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Comman"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Global"
+	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Struct"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Utils"
 	API "github.com/WeixinCloud/wxcloudrun-wxcomponent/api"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/comm/inits"
@@ -51,6 +52,9 @@ func main() {
 		conf, err := Utils.LoadConf(filePath)
 		if err != nil {
 			return err
+		}
+		if conf == nil {
+			conf = new(Struct.Conf)
 		}
 		Global.Conf.APIKey = os.Getenv("API_KEY")
 		Global.Conf.SecretKey = os.Getenv("SECRET_KEY")
