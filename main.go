@@ -56,15 +56,15 @@ func main() {
 		if conf == nil {
 			conf = new(Struct.Conf)
 		}
+		Global.Conf = conf
+		if Global.Conf == nil {
+			return err
+		}
 		Global.Conf.APIKey = os.Getenv("API_KEY")
 		Global.Conf.SecretKey = os.Getenv("SECRET_KEY")
 		Global.Conf.ServiceName = os.Getenv("SERVICE_NAME")
 		Global.Conf.Listen = os.Getenv("LISTEN")
 		Global.Conf.Port, _ = strconv.Atoi(os.Getenv("PORT"))
-		Global.Conf = conf
-		if Global.Conf == nil {
-			return err
-		}
 		// 初始化Token
 		_, _ = Comman.GetAccessToken("", "")
 		var r = gin.Default()
