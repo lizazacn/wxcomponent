@@ -9,6 +9,7 @@ import (
 	API "github.com/WeixinCloud/wxcloudrun-wxcomponent/api"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/comm/inits"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/comm/log"
+	"github.com/WeixinCloud/wxcloudrun-wxcomponent/middleware"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/routers"
 	"github.com/gin-gonic/gin"
 	_ "github.com/joho/godotenv/autoload"
@@ -68,6 +69,7 @@ func main() {
 		// 初始化Token
 		_, _ = Comman.GetAccessToken("", "")
 		var r = gin.Default()
+		r.Use(middleware.LogMiddleWare)
 		var api = r.Group("/api")
 
 		{
