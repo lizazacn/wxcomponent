@@ -31,8 +31,17 @@ func WxCallback(ctx *gin.Context) {
 	}
 	log.Println(*msgInfo)
 
+	var waitStat = true
+	go func() {
+		if waitStat {
+			ctx.String(http.StatusOK, "success")
+			time.Sleep(3 * time.Second)
+		}
+	}()
+
 	answer, err := Comman.GetAnswer(msgInfo.Content)
 	log.Printf("响应数据：%s\n", answer)
+	waitStat = false
 	if err != nil {
 		ctx.XML(http.StatusOK, Struct.XML{
 			ToUserName:   fmt.Sprintf("<![CDATA[%s]]>", msgInfo.FromUserName),

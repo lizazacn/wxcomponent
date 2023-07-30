@@ -70,7 +70,6 @@ func main() {
 		var r = gin.Default()
 		//r.Use(middleware.LogMiddleWare)
 		var api = r.Group("/api")
-
 		{
 			api.POST("/wx_callback", API.WxCallback)
 		}

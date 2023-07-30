@@ -5,6 +5,7 @@ import (
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Global"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Utils"
 	"testing"
+	"time"
 )
 
 func TestGetAccessToken(t *testing.T) {
@@ -31,7 +32,14 @@ func TestGetAnswer(t *testing.T) {
 	if err != nil {
 		return
 	}
-	GetAnswer("你是谁")
+	s := time.Now().Unix()
+	answer, err := GetAnswer("你是谁")
+	if err != nil {
+		return
+	}
+	fmt.Println(answer)
+	e := time.Now().Unix()
+	fmt.Println(e - s)
 }
 
 func TestDataCollate(t *testing.T) {
