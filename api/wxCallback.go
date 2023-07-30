@@ -30,18 +30,18 @@ func WxCallback(ctx *gin.Context) {
 		return
 	}
 	log.Println(*msgInfo)
-
-	var waitStat = true
-	go func() {
-		if waitStat {
-			ctx.String(http.StatusOK, "success")
-			time.Sleep(3 * time.Second)
-		}
-	}()
+	//
+	//var waitStat = true
+	//go func() {
+	//	if waitStat {
+	//		ctx.String(http.StatusOK, "success")
+	//		time.Sleep(3 * time.Second)
+	//	}
+	//}()
 
 	answer, err := Comman.GetAnswer(msgInfo.Content)
 	log.Printf("响应数据：%s\n", answer)
-	waitStat = false
+	//waitStat = false
 	if err != nil {
 		ctx.XML(http.StatusOK, Struct.XML{
 			ToUserName:   fmt.Sprintf("<![CDATA[%s]]>", msgInfo.FromUserName),
@@ -59,4 +59,8 @@ func WxCallback(ctx *gin.Context) {
 		MsgType:      "<![CDATA[text]]>",
 		CreateTime:   time.Now().Unix(),
 	})
+}
+
+func getAccessToken(appid, username string) (string, error) {
+
 }
