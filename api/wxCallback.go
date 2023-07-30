@@ -20,7 +20,7 @@ func WxCallback(ctx *gin.Context) {
 	err := json.Unmarshal(data, msgInfo)
 	//err := ctx.Bind(msgInfo)
 	if err != nil {
-		ctx.JSON(http.StatusOK, Struct.XML{
+		ctx.XML(http.StatusOK, Struct.XML{
 			ToUserName:   msgInfo.FromUserName,
 			FromUserName: msgInfo.ToUserName,
 			Content:      "解析请求数据异常！",
@@ -34,7 +34,7 @@ func WxCallback(ctx *gin.Context) {
 	answer, err := Comman.GetAnswer(msgInfo.Content)
 	log.Printf("响应数据：%s\n", answer)
 	if err != nil {
-		ctx.JSON(http.StatusOK, Struct.XML{
+		ctx.XML(http.StatusOK, Struct.XML{
 			ToUserName:   msgInfo.FromUserName,
 			FromUserName: msgInfo.ToUserName,
 			Content:      "获取答案异常！",
@@ -43,7 +43,7 @@ func WxCallback(ctx *gin.Context) {
 		})
 		return
 	}
-	ctx.JSON(http.StatusOK, Struct.XML{
+	ctx.XML(http.StatusOK, Struct.XML{
 		ToUserName:   msgInfo.FromUserName,
 		FromUserName: msgInfo.ToUserName,
 		Content:      answer,
