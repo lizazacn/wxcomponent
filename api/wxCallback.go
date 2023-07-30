@@ -40,6 +40,7 @@ func WxCallback(ctx *gin.Context) {
 		return
 	}
 	answer, err := Comman.GetAnswer(msgInfo.Data)
+	fmt.Printf("响应数据：%s\n", answer)
 	if err != nil {
 		ctx.XML(http.StatusOK, Struct.XML{
 			ToUserName:   msgInfo.FromUserName,
