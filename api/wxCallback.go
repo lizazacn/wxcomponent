@@ -60,7 +60,3 @@ func WxCallback(ctx *gin.Context) {
 		CreateTime:   time.Now().Unix(),
 	})
 }
-
-func getAccessToken(appid, username string) (string, error) {
-
-}
