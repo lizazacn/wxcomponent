@@ -1,22 +1,24 @@
 package API
 
 import (
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Comman"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Struct"
 	"github.com/gin-gonic/gin"
+	"io"
 	"log"
 	"net/http"
 	"time"
 )
 
 func WxCallback(ctx *gin.Context) {
-	//var data, _ = io.ReadAll(ctx.Request.Body)
+	var data, _ = io.ReadAll(ctx.Request.Body)
 	//return
 	var msgInfo = new(Struct.MsgInfo)
-	//err := json.Unmarshal(data, msgInfo)
-	err := ctx.Bind(msgInfo)
+	err := json.Unmarshal(data, msgInfo)
+	//err := ctx.Bind(msgInfo)
 	if err != nil {
 		ctx.XML(http.StatusOK, Struct.XML{
 			ToUserName:   msgInfo.FromUserName,
