@@ -21,10 +21,10 @@ func WxCallback(ctx *gin.Context) {
 	//err := ctx.Bind(msgInfo)
 	if err != nil {
 		ctx.XML(http.StatusOK, Struct.XML{
-			ToUserName:   msgInfo.FromUserName,
-			FromUserName: msgInfo.ToUserName,
-			Content:      "解析请求数据异常！",
-			MsgType:      msgInfo.MsgType,
+			ToUserName:   fmt.Sprintf("<![CDATA[%s]]>", msgInfo.FromUserName),
+			FromUserName: fmt.Sprintf("<![CDATA[%s]]>", msgInfo.ToUserName),
+			Content:      fmt.Sprintf("<![CDATA[%s]]>", "解析请求数据异常！"),
+			MsgType:      "<![CDATA[text]]>",
 			CreateTime:   time.Now().Unix(),
 		})
 		return
@@ -35,19 +35,19 @@ func WxCallback(ctx *gin.Context) {
 	log.Printf("响应数据：%s\n", answer)
 	if err != nil {
 		ctx.XML(http.StatusOK, Struct.XML{
-			ToUserName:   msgInfo.FromUserName,
-			FromUserName: msgInfo.ToUserName,
-			Content:      "获取答案异常！",
-			MsgType:      msgInfo.MsgType,
+			ToUserName:   fmt.Sprintf("<![CDATA[%s]]>", msgInfo.FromUserName),
+			FromUserName: fmt.Sprintf("<![CDATA[%s]]>", msgInfo.ToUserName),
+			Content:      fmt.Sprintf("<![CDATA[%s]]>", "解析请求数据异常！"),
+			MsgType:      "<![CDATA[text]]>",
 			CreateTime:   time.Now().Unix(),
 		})
 		return
 	}
 	ctx.XML(http.StatusOK, Struct.XML{
-		ToUserName:   msgInfo.FromUserName,
-		FromUserName: msgInfo.ToUserName,
-		Content:      answer,
-		MsgType:      msgInfo.MsgType,
+		ToUserName:   fmt.Sprintf("<![CDATA[%s]]>", msgInfo.FromUserName),
+		FromUserName: fmt.Sprintf("<![CDATA[%s]]>", msgInfo.ToUserName),
+		Content:      fmt.Sprintf("<![CDATA[%s]]>", answer),
+		MsgType:      "<![CDATA[text]]>",
 		CreateTime:   time.Now().Unix(),
 	})
 }
