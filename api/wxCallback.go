@@ -3,6 +3,7 @@ package API
 import (
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Comman"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Struct"
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,7 @@ import (
 
 func WxCallback(ctx *gin.Context) {
 	var data, _ = io.ReadAll(ctx.Request.Body)
+	fmt.Println(string(data))
 	log.Println(string(data))
 	//return
 	var msgInfo = new(Struct.MsgInfo)
@@ -41,6 +43,7 @@ func WxCallback(ctx *gin.Context) {
 		})
 		return
 	}
+	fmt.Println(*wxMsg)
 	log.Println(*wxMsg)
 	answer, err := Comman.GetAnswer(msgInfo.Data)
 	log.Printf("响应数据：%s\n", answer)
