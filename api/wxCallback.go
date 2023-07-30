@@ -15,6 +15,7 @@ import (
 
 func WxCallback(ctx *gin.Context) {
 	var data, _ = io.ReadAll(ctx.Request.Body)
+	fmt.Printf("请求数据：%s", string(data))
 	//return
 	var msgInfo = new(Struct.MsgInfo)
 	err := json.Unmarshal(data, msgInfo)
