@@ -15,6 +15,7 @@ type MsgInfo struct {
 	MsgType      string `json:"MsgType"`
 	CreateTime   int64  `json:"CreateTime"`
 	Data         string `json:"Data"`
+	Content      string `json:"Content" xml:"Content"`
 }
 
 type XML struct {
