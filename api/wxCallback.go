@@ -1,62 +1,100 @@
 package API
 
 import (
+	"bytes"
 	"encoding/json"
-	"fmt"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Comman"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Struct"
 	"github.com/gin-gonic/gin"
-	"io"
+	Requests "github.com/lizazacn/requests"
 	"log"
 	"net/http"
 	"time"
 )
 
 func WxCallback(ctx *gin.Context) {
-	var data, _ = io.ReadAll(ctx.Request.Body)
-	fmt.Printf("请求数据：%s", string(data))
+	//var data, _ = io.ReadAll(ctx.Request.Body)
+	//fmt.Printf("请求数据：%s", string(data))
 	//return
+	var appid = ctx.GetHeader("X-Wx-Appid")
 	var msgInfo = new(Struct.XML)
-	err := json.Unmarshal(data, msgInfo)
-	//err := ctx.Bind(msgInfo)
+	//err := json.Unmarshal(data, msgInfo)
+	err := ctx.Bind(msgInfo)
 	if err != nil {
+		//ctx.XML(http.StatusOK, Struct.XML{
+		//	ToUserName:   fmt.Sprintf("<![CDATA[%s]]>", msgInfo.FromUserName),
+		//	FromUserName: fmt.Sprintf("<![CDATA[%s]]>", msgInfo.ToUserName),
+		//	Content:      fmt.Sprintf("<![CDATA[%s]]>", "解析请求数据异常！"),
+		//	MsgType:      "<![CDATA[text]]>",
+		//	CreateTime:   time.Now().Unix(),
+		//})
 		ctx.XML(http.StatusOK, Struct.XML{
-			ToUserName:   fmt.Sprintf("<![CDATA[%s]]>", msgInfo.FromUserName),
-			FromUserName: fmt.Sprintf("<![CDATA[%s]]>", msgInfo.ToUserName),
-			Content:      fmt.Sprintf("<![CDATA[%s]]>", "解析请求数据异常！"),
-			MsgType:      "<![CDATA[text]]>",
+			ToUserName:   msgInfo.FromUserName,
+			FromUserName: msgInfo.ToUserName,
+			MsgType:      "text",
 			CreateTime:   time.Now().Unix(),
+			Content:      "解析请求数据异常!",
 		})
 		return
 	}
 	log.Println(*msgInfo)
-	//
-	//var waitStat = true
-	//go func() {
-	//	if waitStat {
-	//		ctx.String(http.StatusOK, "success")
-	//		time.Sleep(3 * time.Second)
-	//	}
-	//}()
 
+	ctx.String(http.StatusOK, "success")
 	answer, err := Comman.GetAnswer(msgInfo.Content)
 	log.Printf("响应数据：%s\n", answer)
 	//waitStat = false
 	if err != nil {
-		ctx.XML(http.StatusOK, Struct.XML{
-			ToUserName:   fmt.Sprintf("<![CDATA[%s]]>", msgInfo.FromUserName),
-			FromUserName: fmt.Sprintf("<![CDATA[%s]]>", msgInfo.ToUserName),
-			Content:      fmt.Sprintf("<![CDATA[%s]]>", "解析请求数据异常！"),
-			MsgType:      "<![CDATA[text]]>",
-			CreateTime:   time.Now().Unix(),
-		})
+		//ctx.XML(http.StatusOK, Struct.XML{
+		//	ToUserName:   fmt.Sprintf("<![CDATA[%s]]>", msgInfo.FromUserName),
+		//	FromUserName: fmt.Sprintf("<![CDATA[%s]]>", msgInfo.ToUserName),
+		//	Content:      fmt.Sprintf("<![CDATA[%s]]>", "解析请求数据异常！"),
+		//	MsgType:      "<![CDATA[text]]>",
+		//	CreateTime:   time.Now().Unix(),
+		//})
+		_ = SendCustomerServiceMsg(appid, "解析请求数据异常!", msgInfo.FromUserName)
+		//ctx.XML(http.StatusOK, Struct.XML{
+		//	ToUserName:   msgInfo.FromUserName,
+		//	FromUserName: msgInfo.ToUserName,
+		//	MsgType:      "text",
+		//	CreateTime:   time.Now().Unix(),
+		//	Content:      "解析请求数据异常!",
+		//})
 		return
 	}
-	ctx.XML(http.StatusOK, Struct.XML{
-		ToUserName:   fmt.Sprintf("<![CDATA[%s]]>", msgInfo.FromUserName),
-		FromUserName: fmt.Sprintf("<![CDATA[%s]]>", msgInfo.ToUserName),
-		Content:      fmt.Sprintf("<![CDATA[%s]]>", answer),
-		MsgType:      "<![CDATA[text]]>",
-		CreateTime:   time.Now().Unix(),
-	})
+	//ctx.XML(http.StatusOK, Struct.XML{
+	//	ToUserName:   fmt.Sprintf("<![CDATA[%s]]>", msgInfo.FromUserName),
+	//	FromUserName: fmt.Sprintf("<![CDATA[%s]]>", msgInfo.ToUserName),
+	//	Content:      fmt.Sprintf("<![CDATA[%s]]>", answer),
+	//	MsgType:      "<![CDATA[text]]>",
+	//	CreateTime:   time.Now().Unix(),
+	//})
+	_ = SendCustomerServiceMsg(appid, answer, msgInfo.FromUserName)
+	//ctx.XML(http.StatusOK, Struct.XML{
+	//	ToUserName:   msgInfo.FromUserName,
+	//	FromUserName: msgInfo.ToUserName,
+	//	MsgType:      "text",
+	//	CreateTime:   time.Now().Unix(),
+	//	Content:      answer,
+	//})
+}
+
+func SendCustomerServiceMsg(appid, msg, toUser string) error {
+	url := "http://api.weixin.qq.com/cgi-bin/message/custom/send?from_appid=" + appid
+	var data = make(map[string]interface{})
+	data["touser"] = toUser
+	data["msgtype"] = "text"
+	data["text"] = map[string]string{"content": msg}
+	buffer, err := json.Marshal(data)
+	if err != nil {
+		return err
+	}
+	var buf = bytes.NewBuffer(buffer)
+	var header = http.Header{}
+	header.Add("Content-Type", "application/json")
+	response, err := Requests.Requests(http.MethodPost, url, buf, header, true, false, nil)
+	if err != nil {
+		return err
+	}
+	log.Println(string(response.Text))
+	return nil
 }
