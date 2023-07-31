@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Comman"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Struct"
+	"github.com/WeixinCloud/wxcloudrun-wxcomponent/comm/wx"
 	"github.com/gin-gonic/gin"
 	Requests "github.com/lizazacn/requests"
 	"log"
@@ -80,14 +81,21 @@ func WxCallback(ctx *gin.Context) {
 
 func SendCustomerServiceMsg(appid, msg, toUser string) error {
 	log.Printf("APPID: %s", appid)
+	accessToken, err := wx.GetAuthorizerAccessToken(appid)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
 	//url := "http://api.weixin.qq.com/cgi-bin/message/custom/send"
-	url := "http://api.weixin.qq.com/cgi-bin/message/custom/send?from_appid=" + appid
+	//url := "http://api.weixin.qq.com/cgi-bin/message/custom/send?from_appid=" + appid
+	url := "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + accessToken
 	var data = make(map[string]interface{})
 	data["touser"] = toUser
 	data["msgtype"] = "text"
 	data["text"] = map[string]string{"content": msg}
 	buffer, err := json.Marshal(data)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 	var buf = bytes.NewBuffer(buffer)
@@ -95,6 +103,7 @@ func SendCustomerServiceMsg(appid, msg, toUser string) error {
 	header.Add("Content-Type", "application/json")
 	response, err := Requests.Requests(http.MethodPost, url, buf, header, true, false, nil)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 	log.Println(string(response.Text))
