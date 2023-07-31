@@ -80,8 +80,8 @@ func WxCallback(ctx *gin.Context) {
 
 func SendCustomerServiceMsg(appid, msg, toUser string) error {
 	log.Printf("APPID: %s", appid)
-	url := "http://api.weixin.qq.com/cgi-bin/message/custom/send"
-	//url := "http://api.weixin.qq.com/cgi-bin/message/custom/send?from_appid=" + appid
+	//url := "http://api.weixin.qq.com/cgi-bin/message/custom/send"
+	url := "http://api.weixin.qq.com/cgi-bin/message/custom/send?from_appid=" + appid
 	var data = make(map[string]interface{})
 	data["touser"] = toUser
 	data["msgtype"] = "text"
