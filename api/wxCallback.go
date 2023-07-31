@@ -16,7 +16,7 @@ func WxCallback(ctx *gin.Context) {
 	//var data, _ = io.ReadAll(ctx.Request.Body)
 	//fmt.Printf("请求数据：%s", string(data))
 	//return
-	var appid = ctx.GetHeader("X-Wx-Appid")
+	//var appid = ctx.GetHeader("X-Wx-Appid")
 	var msgInfo = new(Struct.XML)
 	//err := json.Unmarshal(data, msgInfo)
 	err := ctx.Bind(msgInfo)
@@ -51,7 +51,7 @@ func WxCallback(ctx *gin.Context) {
 		//	MsgType:      "<![CDATA[text]]>",
 		//	CreateTime:   time.Now().Unix(),
 		//})
-		_ = SendCustomerServiceMsg(appid, "解析请求数据异常!", msgInfo.FromUserName)
+		_ = SendCustomerServiceMsg(msgInfo.AppId, "解析请求数据异常!", msgInfo.FromUserName)
 		//ctx.XML(http.StatusOK, Struct.XML{
 		//	ToUserName:   msgInfo.FromUserName,
 		//	FromUserName: msgInfo.ToUserName,
@@ -68,7 +68,7 @@ func WxCallback(ctx *gin.Context) {
 	//	MsgType:      "<![CDATA[text]]>",
 	//	CreateTime:   time.Now().Unix(),
 	//})
-	_ = SendCustomerServiceMsg(appid, answer, msgInfo.FromUserName)
+	_ = SendCustomerServiceMsg(msgInfo.AppId, answer, msgInfo.FromUserName)
 	//ctx.XML(http.StatusOK, Struct.XML{
 	//	ToUserName:   msgInfo.FromUserName,
 	//	FromUserName: msgInfo.ToUserName,
@@ -79,6 +79,7 @@ func WxCallback(ctx *gin.Context) {
 }
 
 func SendCustomerServiceMsg(appid, msg, toUser string) error {
+	log.Printf("APPID: ", appid)
 	url := "http://api.weixin.qq.com/cgi-bin/message/custom/send?from_appid=" + appid
 	var data = make(map[string]interface{})
 	data["touser"] = toUser

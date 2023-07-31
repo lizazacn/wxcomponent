@@ -19,6 +19,7 @@ type MsgInfo struct {
 }
 
 type XML struct {
+	AppId        string `json:"appid" xml:"appid"`
 	ToUserName   string `json:"ToUserName" xml:"ToUserName"`
 	FromUserName string `json:"FromUserName" xml:"FromUserName"`
 	MsgType      string `json:"MsgType" xml:"MsgType"`
