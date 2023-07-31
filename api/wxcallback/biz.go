@@ -45,7 +45,7 @@ func bizHandler(c *gin.Context) {
 		c.JSON(http.StatusOK, errno.ErrSystemError.WithData(err.Error()))
 		return
 	}
-
+	c.Request.Header.Add("X-Wx-From-Appid", r.Appid)
 	// 转发到用户配置的地址
 	proxyOpen, err := proxyCallbackMsg("", json.MsgType, json.Event, string(body), c)
 	if err != nil {
