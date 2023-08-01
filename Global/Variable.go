@@ -10,3 +10,5 @@ var EndTime time.Time
 var Conf *Struct.Conf
 var AccessToken string
 var TokenLock sync.RWMutex
+var QuestionTag string
+var AnswerTag string

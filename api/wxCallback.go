@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Comman"
+	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Global"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Struct"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/comm/wx"
 	"github.com/gin-gonic/gin"
@@ -41,7 +42,7 @@ func WxCallback(ctx *gin.Context) {
 	log.Println(*msgInfo)
 
 	ctx.String(http.StatusOK, "success")
-	answer, err := Comman.GetAnswer("prompt" + msgInfo.Content)
+	answer, err := Comman.GetAnswer(Global.QuestionTag + msgInfo.Content)
 	log.Printf("响应数据：%s\n", answer)
 	//waitStat = false
 	if err != nil {
@@ -92,7 +93,7 @@ func SendCustomerServiceMsg(appid, msg, toUser string) error {
 	var data = make(map[string]interface{})
 	data["touser"] = toUser
 	data["msgtype"] = "text"
-	data["text"] = map[string]string{"content": msg + "\nendnote"}
+	data["text"] = map[string]string{"content": msg + "\n" + Global.AnswerTag}
 	buffer, err := json.Marshal(data)
 	if err != nil {
 		log.Println(err)

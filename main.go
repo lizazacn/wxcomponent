@@ -64,7 +64,16 @@ func main() {
 		Global.Conf.SecretKey = os.Getenv("SECRET_KEY")
 		Global.Conf.ServiceName = os.Getenv("SERVICE_NAME")
 		Global.Conf.Listen = os.Getenv("LISTEN")
+		Global.QuestionTag = os.Getenv("QUESTION_TAG")
+		Global.AnswerTag = os.Getenv("ANSWER_TAG")
 		Global.Conf.Port, _ = strconv.Atoi(os.Getenv("PORT"))
+
+		if Global.QuestionTag == "" {
+			Global.QuestionTag = "prompt"
+		}
+		if Global.AnswerTag == "" {
+			Global.AnswerTag = "endnote"
+		}
 		// 初始化Token
 		_, _ = Comman.GetAccessToken("", "")
 		var r = gin.Default()
