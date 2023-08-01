@@ -80,6 +80,9 @@ func NotOverdue() bool {
 func DataCollate(in string) string {
 	var out string
 	dataList := strings.Split(in, "[")
+	if len(dataList) < 2 {
+		return in
+	}
 	dataList = dataList[:len(dataList)-1]
 	out = strings.Join(dataList, "[")
 	return out

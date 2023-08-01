@@ -41,7 +41,7 @@ func WxCallback(ctx *gin.Context) {
 	log.Println(*msgInfo)
 
 	ctx.String(http.StatusOK, "success")
-	answer, err := Comman.GetAnswer(msgInfo.Content)
+	answer, err := Comman.GetAnswer("prompt" + msgInfo.Content)
 	log.Printf("响应数据：%s\n", answer)
 	//waitStat = false
 	if err != nil {
@@ -92,7 +92,7 @@ func SendCustomerServiceMsg(appid, msg, toUser string) error {
 	var data = make(map[string]interface{})
 	data["touser"] = toUser
 	data["msgtype"] = "text"
-	data["text"] = map[string]string{"content": msg}
+	data["text"] = map[string]string{"content": msg + "\nendnote"}
 	buffer, err := json.Marshal(data)
 	if err != nil {
 		log.Println(err)
