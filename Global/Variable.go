@@ -12,3 +12,4 @@ var AccessToken string
 var TokenLock sync.RWMutex
 var QuestionTag string
 var AnswerTag string
+var MaxCallback int

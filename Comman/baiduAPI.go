@@ -19,7 +19,7 @@ func GetAccessToken(apiKey, secretKey string) (string, error) {
 		secretKey = Global.Conf.SecretKey
 	}
 	Global.EndTime = time.Now().AddDate(0, 0, 29)
-	fmt.Printf("EndTime: %v", Global.EndTime)
+	fmt.Printf("当前Token：%s,\n 预计过期时间: %v\n", Global.AccessToken, Global.EndTime)
 	var url = fmt.Sprintf("https://aip.baidubce.com/oauth/2.0/token?client_id=%s&client_secret=%s&grant_type=client_credentials", apiKey, secretKey)
 	response, err := Requests.Requests(http.MethodGet, url, nil, nil, true, false, nil)
 	if err != nil {
@@ -34,6 +34,13 @@ func GetAccessToken(apiKey, secretKey string) (string, error) {
 }
 
 func GetAnswer(question string) (string, error) {
+	if Global.MaxCallback >= 2 {
+		return "系统异常请稍后重试！", nil
+	}
+	Global.MaxCallback++
+	defer func() {
+		Global.MaxCallback--
+	}()
 	if question == "" {
 		return "请求数据不能为空！", errors.New("请求数据不能为空！")
 	}
@@ -61,6 +68,7 @@ func GetAnswer(question string) (string, error) {
 	if !NotOverdue() {
 		_, _ = GetAccessToken("", "")
 	}
+	url = fmt.Sprintf("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/plugin/%s/?access_token=%s", Global.Conf.ServiceName, Global.AccessToken)
 	response, err := Requests.Requests(http.MethodPost, url, buf, header, true, false, nil)
 	if err != nil {
 		_, _ = GetAccessToken("", "")
