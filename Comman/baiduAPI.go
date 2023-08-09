@@ -66,9 +66,11 @@ func GetAnswer(question string) (string, error) {
 	var header = http.Header{}
 	header.Add("Content-Type", "application/json")
 	if !NotOverdue() {
-		_, _ = GetAccessToken("", "")
+		var newToken, _ = GetAccessToken("", "")
+		Global.AccessToken = newToken
+		url = fmt.Sprintf("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/plugin/%s/?access_token=%s", Global.Conf.ServiceName, newToken)
 	}
-	url = fmt.Sprintf("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/plugin/%s/?access_token=%s", Global.Conf.ServiceName, Global.AccessToken)
+
 	response, err := Requests.Requests(http.MethodPost, url, buf, header, true, false, nil)
 	if err != nil {
 		_, _ = GetAccessToken("", "")
