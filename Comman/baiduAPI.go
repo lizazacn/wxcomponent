@@ -34,13 +34,13 @@ func GetAccessToken(apiKey, secretKey string) (string, error) {
 }
 
 func GetAnswer(question string) (string, error) {
-	if Global.MaxCallback >= 2 {
-		return "系统异常请稍后重试！", nil
-	}
 	Global.MaxCallback++
 	defer func() {
 		Global.MaxCallback--
 	}()
+	if Global.MaxCallback >= 2 {
+		return "系统异常请稍后重试！", nil
+	}
 	if question == "" {
 		return "请求数据不能为空！", errors.New("请求数据不能为空！")
 	}
