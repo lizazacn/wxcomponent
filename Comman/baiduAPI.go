@@ -73,14 +73,21 @@ func GetAnswer(question string) (string, error) {
 		Global.AccessToken = newToken
 		url = fmt.Sprintf("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/plugin/%s/?access_token=%s", Global.Conf.ServiceName, newToken)
 	}
-
+	var tryCount = 0
+reTry:
 	response, err := Requests.Requests(http.MethodPost, url, buf, header, true, false, nil)
 	if err != nil {
-		_, err = GetAccessToken("", "")
+		tryCount++
+		newToken, err := GetAccessToken("", "")
 		if err != nil {
 			return "服务端异常，请稍后重试！", err
 		}
-		return GetAnswer(question)
+		Global.AccessToken = newToken
+		url = fmt.Sprintf("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/plugin/%s/?access_token=%s", Global.Conf.ServiceName, newToken)
+		if tryCount > 10 {
+			return "服务端异常次数过多，请联系管理员！", err
+		}
+		goto reTry
 	}
 	var res, ok = response.Map["result"].(string)
 	if !ok {
