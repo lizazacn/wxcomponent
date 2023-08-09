@@ -18,7 +18,7 @@ func GetAccessToken(apiKey, secretKey string) (string, error) {
 		apiKey = Global.Conf.APIKey
 		secretKey = Global.Conf.SecretKey
 	}
-	Global.EndTime = time.Now().AddDate(0, 0, 29)
+	Global.EndTime = time.Now().AddDate(0, 0, 20)
 	fmt.Printf("当前Token：%s,\n 预计过期时间: %v\n", Global.AccessToken, Global.EndTime)
 	var url = fmt.Sprintf("https://aip.baidubce.com/oauth/2.0/token?client_id=%s&client_secret=%s&grant_type=client_credentials", apiKey, secretKey)
 	response, err := Requests.Requests(http.MethodGet, url, nil, nil, true, false, nil)
