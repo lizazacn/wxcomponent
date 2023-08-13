@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Global"
 	"github.com/WeixinCloud/wxcloudrun-wxcomponent/Utils"
+	"sync"
 	"testing"
 	"time"
 )
@@ -32,13 +33,21 @@ func TestGetAnswer(t *testing.T) {
 	if err != nil {
 		return
 	}
+	var wait sync.WaitGroup
 	s := time.Now().Unix()
-	answer, err := GetAnswer("你是谁")
-	if err != nil {
-		return
+	for i := 0; i < 10; i++ {
+		wait.Add(1)
+		go func() {
+			defer wait.Done()
+			answer, err := GetAnswer("你是谁")
+			if err != nil {
+				return
+			}
+			fmt.Println(answer)
+		}()
 	}
-	fmt.Println(answer)
 	e := time.Now().Unix()
+	wait.Wait()
 	fmt.Println(e - s)
 }
 

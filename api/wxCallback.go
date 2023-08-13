@@ -102,7 +102,7 @@ func SendCustomerServiceMsg(appid, msg, toUser string) error {
 	var buf = bytes.NewBuffer(buffer)
 	var header = http.Header{}
 	header.Add("Content-Type", "application/json")
-	response, err := Requests.Requests(http.MethodPost, url, buf, header, true, false, nil)
+	response, err := Requests.Requests(http.MethodPost, url, buf, header, true, true, false, nil)
 	if err != nil {
 		log.Println(err)
 		return err

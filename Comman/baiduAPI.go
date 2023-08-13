@@ -21,7 +21,7 @@ func GetAccessToken(apiKey, secretKey string) (string, error) {
 	Global.EndTime = time.Now().AddDate(0, 0, 20)
 	fmt.Printf("当前Token：%s,\n 预计过期时间: %v\n", Global.AccessToken, Global.EndTime)
 	var url = fmt.Sprintf("https://aip.baidubce.com/oauth/2.0/token?client_id=%s&client_secret=%s&grant_type=client_credentials", apiKey, secretKey)
-	response, err := Requests.Requests(http.MethodGet, url, nil, nil, true, false, nil)
+	response, err := Requests.Requests(http.MethodGet, url, nil, nil, true, true, false, nil)
 	if err != nil {
 		return "", err
 	}
@@ -75,7 +75,7 @@ func GetAnswer(question string) (string, error) {
 	}
 	var tryCount = 0
 reTry:
-	response, err := Requests.Requests(http.MethodPost, url, buf, header, true, false, nil)
+	response, err := Requests.Requests(http.MethodPost, url, buf, header, true, true, false, nil)
 	if err != nil {
 		tryCount++
 		newToken, err := GetAccessToken("", "")
