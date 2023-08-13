@@ -47,17 +47,17 @@ func GetAnswer(question string) (string, error) {
 	if len(question) >= 2000 {
 		return "请求数据超出最大长度限制，最大长度限制为2000字符！", errors.New("请求数据超出最大长度限制，最大长度限制为2000字符！")
 	}
-	var url = fmt.Sprintf("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/plugin/%s/?access_token=%s", Global.Conf.ServiceName, Global.AccessToken)
-	//var url = fmt.Sprintf("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions?access_token=%s", Global.AccessToken)
-	//var data = make(map[string][]map[string]string)
-	//data["messages"] = []map[string]string{
-	//	{
-	//		"role":    "user",
-	//		"content": question,
-	//	},
-	//}
-	var data = make(map[string]string)
-	data["query"] = question
+	//var url = fmt.Sprintf("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/plugin/%s/?access_token=%s", Global.Conf.ServiceName, Global.AccessToken)
+	var url = fmt.Sprintf("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions?access_token=%s", Global.AccessToken)
+	var data = make(map[string][]map[string]string)
+	data["messages"] = []map[string]string{
+		{
+			"role":    "user",
+			"content": question,
+		},
+	}
+	//var data = make(map[string]string)
+	//data["query"] = question
 	buffer, err := json.Marshal(data)
 	if err != nil {
 		return "", err
@@ -71,7 +71,8 @@ func GetAnswer(question string) (string, error) {
 			return "服务端异常，请稍后重试！", err
 		}
 		Global.AccessToken = newToken
-		url = fmt.Sprintf("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/plugin/%s/?access_token=%s", Global.Conf.ServiceName, newToken)
+		//url = fmt.Sprintf("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/plugin/%s/?access_token=%s", Global.Conf.ServiceName, newToken)
+		url = fmt.Sprintf("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions?access_token=%s", Global.AccessToken)
 	}
 	var tryCount = 0
 reTry:
@@ -83,7 +84,9 @@ reTry:
 			return "服务端异常，请稍后重试！", err
 		}
 		Global.AccessToken = newToken
-		url = fmt.Sprintf("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/plugin/%s/?access_token=%s", Global.Conf.ServiceName, newToken)
+		url = fmt.Sprintf("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions?access_token=%s", Global.AccessToken)
+
+		//url = fmt.Sprintf("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/plugin/%s/?access_token=%s", Global.Conf.ServiceName, newToken)
 		if tryCount > 10 {
 			return "服务端异常次数过多，请联系管理员！", err
 		}

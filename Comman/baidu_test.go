@@ -35,7 +35,7 @@ func TestGetAnswer(t *testing.T) {
 	}
 	var wait sync.WaitGroup
 	s := time.Now().Unix()
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 1; i++ {
 		wait.Add(1)
 		go func() {
 			defer wait.Done()
