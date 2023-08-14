@@ -28,7 +28,7 @@ WORKDIR /wxcloudrun-wxcomponent
 COPY --from=builder /wxcloudrun-wxcomponent/main /wxcloudrun-wxcomponent/
 COPY --from=builder /wxcloudrun-wxcomponent/comm/config/server.conf /wxcloudrun-wxcomponent/comm/config/
 COPY --from=builder /wxcloudrun-wxcomponent/etc/config.json /wxcloudrun-wxcomponent/etc/
-COPY --from=nodeBuilder /wxcloudrun-wxcomponent/client/dist /wxcloudrun-wxcomponent/client/dist
+COPY --from=builder /wxcloudrun-wxcomponent/client/dist /wxcloudrun-wxcomponent/client/dist
 
 # 设置时区
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
