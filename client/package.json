@@ -6,8 +6,7 @@
         "start": "vite",
         "build": "tsc && vite build",
         "serve": "vite preview",
-        "check-host": "node ./scripts/checkHost.mjs",
-        "prepare": "cd .. && husky install"
+        "check-host": "node ./scripts/checkHost.mjs"
     },
     "dependencies": {
         "axios": "0.24.0",
@@ -29,7 +28,6 @@
         "@types/validator": "13.7.2",
         "@vitejs/plugin-react": "1.3.0",
         "csstype": "3.0.10",
-        "husky": "7.0.4",
         "typescript": "4.6.3",
         "vite": "2.9.15"
     }
