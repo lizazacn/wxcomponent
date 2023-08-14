@@ -26,6 +26,5 @@ client/yarn-error.log*
 client/yarn.lock
 client/package-lock.json
 client/.vscode
-client/dist
 
 etc/config.json
